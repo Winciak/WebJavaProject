@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+
+    <title>Information List</title>
+</head>
+
+
+<body>
+
+
+<nav th:insert="index.html :: navbar"></nav>
+
+<div class="container">
+    <h3>Your info</h3>
+    <hr>
+
+    <div class="row g-4 mb-3">
+
+        <div class="col-auto">
+            <a th:href="@{/info/addInfo}"
+               class="btn btn-primary ">
+                Add Info
+            </a>
+        </div>
+
+
+    </div>
+
+    <table class="table table-bordered table-striped" >
+        <thead class="table-dark">
+        <tr>
+            <th class="align-middle">
+                <a th:href="@{'?sortField=title&sortDir=' + ${reverseSortDir}}">Title</a>
+            </th>
+            <th class="align-middle">Content</th>
+            <th class="align-middle">
+                <a th:href="@{'?sortField=creationDate&sortDir=' + ${reverseSortDir}}">Creation Date</a>
+            </th>
+            <th class="align-middle">Link</th>
+            <th class="align-middle">
+                <a th:href="@{'?sortField=category.name&sortDir=' + ${reverseSortDir}}">Category</a>
+            </th>
+
+            <th class="align-middle">Action</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempInfo : ${informationList}">
+
+            <td class="align-middle" th:text="${tempInfo.title}" />
+            <td class="align-middle" th:text="${tempInfo.content}" />
+            <td class="align-middle" th:text="${#dates.format(tempInfo.creationDate, 'dd/MM/yyyy')}" />
+            <td class="align-middle">
+                <a th:href="${tempInfo.link}" th:text="${tempInfo.link}" target="_blank"/>
+            </td>
+            <td class="align-middle" th:text="${tempInfo.category}" />
+
+            <td class="align-middle">
+                <div class="btn-group-vertical">
+
+                    <a th:href="@{/info/updateInfo(informationId=${tempInfo.id})}"
+                       class="btn btn-info btn-sm ">
+                        Update
+                    </a>
+
+                    <a th:href="@{/info/delete(informationId=${tempInfo.id})}"
+                       class="btn btn-danger btn-sm"
+                       th:onclick="if (!(confirm('Are you sure you want to delete this information : [(${tempInfo.title})]?'))) return false">
+                        Delete
+                    </a>
+
+
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <div><i>Sorted by [[${sortField}]] in [[${sortDir}]] order</i></div>
+
+</div>
+
+
+
+</body>
+</html>
